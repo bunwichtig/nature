@@ -1,0 +1,305 @@
+/* Pure Nature – Kompendium. Handy zuerst. Schriften liegen im Repo (fonts/, SIL Open Font License). */
+@font-face{font-family:"Figtree";font-weight:400;font-display:swap;src:url(../fonts/figtree-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Figtree";font-weight:600;font-display:swap;src:url(../fonts/figtree-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Bricolage Grotesque";font-weight:700;font-display:swap;src:url(../fonts/bricolage-grotesque-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Newsreader";font-style:italic;font-weight:400;font-display:swap;src:url(../fonts/newsreader-latin-400-italic.woff2) format("woff2")}
+
+:root{
+  --night:#0a0f0e; --panel:#111a17; --panel-2:#17241f; --line:#25362f;
+  --ink:#e8eee6; --muted:#8fa197; --pollen:#e7ad4f; --leaf:#86b86f; --fungi:#c79ad0; --red:#e0735f;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --f-sci:"Newsreader",Georgia,serif;
+  --emoji:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--night)}
+body{margin:0;background:var(--night);color:var(--ink);font:15px/1.5 var(--f-body);min-height:100vh;
+  padding:0 max(16px,env(safe-area-inset-right)) calc(78px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+a{color:var(--ink);text-decoration-color:var(--pollen);text-underline-offset:3px}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--pollen);outline-offset:2px}
+[hidden]{display:none!important}
+h1,h2{font-family:var(--f-display);letter-spacing:-.01em;line-height:1.15;margin:0 0 6px}
+h1{font-size:clamp(22px,5vw,30px)} h2{font-size:18px}
+p{margin:0 0 8px}
+.wrap{max-width:980px;margin:0 auto}
+.muted{color:var(--muted)} .klein{font-size:13px} .gold{color:var(--pollen)}
+.sci{font-family:var(--f-sci);font-style:italic;color:var(--muted);margin:0 0 8px}
+
+/* ---------- Kopf ---------- */
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;background:rgba(10,15,14,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);margin:0 calc(-1*max(16px,env(safe-area-inset-left)));padding:max(8px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 8px max(16px,env(safe-area-inset-left))}
+.brand{font:700 19px/1 var(--f-display);text-decoration:none;white-space:nowrap}
+.brand span{color:var(--pollen)}
+.pro-pill{font:700 11px/1 var(--f-body);letter-spacing:.08em;color:#1a1204;background:linear-gradient(135deg,#f6d27a,#e7ad4f 50%,#c9852a);padding:4px 7px;border-radius:999px;vertical-align:middle}
+.kopf-profil{margin-left:auto;display:flex;align-items:center;gap:8px;text-decoration:none;font-size:13px;color:var(--muted)}
+.nav-oben{display:none}
+.nav a{text-decoration:none;color:var(--muted)}
+.nav a.an{color:var(--ink)}
+.nav-unten{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(13,20,18,.97);
+  border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.nav-unten a{display:grid;justify-items:center;font-size:11px;gap:1px;padding:4px 0}
+.nav-unten a span{font-family:var(--emoji);font-size:20px;line-height:1.2}
+.nav-unten a.an{color:var(--pollen)}
+.nav-unten .plus-knopf span{background:var(--leaf);color:#0a120c;border-radius:999px;width:40px;height:32px;display:grid;place-items:center;font:700 22px/1 var(--f-body)}
+@media (min-width:860px){
+  body{padding-bottom:30px}
+  .nav-unten{display:none}
+  .nav-oben{display:flex;gap:4px;margin-left:24px}
+  .nav-oben a{padding:6px 12px;border-radius:999px}
+  .nav-oben a.an{background:var(--panel-2)}
+}
+.fuss{color:var(--muted);font-size:12px;padding:28px 0 8px;text-align:center}
+.fuss a{color:var(--muted)}
+
+/* ---------- Bausteine ---------- */
+main{padding-top:16px;display:grid;gap:14px}
+.karte{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+.kopfzeile{padding:4px 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--leaf);color:#0b130d;border:0;border-radius:12px;
+  padding:10px 16px;font-weight:600;text-decoration:none;cursor:pointer;min-height:44px}
+.btn.leise{background:var(--panel-2);color:var(--ink);border:1px solid var(--line)}
+.btn.gold{background:linear-gradient(135deg,#f6d27a,#e7ad4f 55%,#c9852a);color:#1a1204}
+.btn.rot{color:var(--red)}
+.btn.gross{width:100%;font-size:17px;min-height:52px}
+.btn.klein{min-height:36px;padding:6px 12px;font-size:14px}
+.icon{background:none;border:0;cursor:pointer;font-size:18px;padding:8px;opacity:.7}
+.icon:hover{opacity:1}
+.reihe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0}
+.chip{background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;white-space:nowrap}
+.chip.an{background:var(--leaf);color:#0b130d;border-color:var(--leaf);font-weight:600}
+input,select,textarea{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%;min-height:44px}
+input::placeholder,textarea::placeholder{color:var(--muted)}
+label{display:grid;gap:4px;font-weight:600;font-size:14px}
+.form{display:grid;gap:14px}
+fieldset{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0;display:grid;gap:8px}
+legend{font-weight:600;font-size:14px;padding:0 4px}
+.suche-zeile{display:flex;gap:8px}
+.suche-zeile input{flex:1;min-width:0}
+.filter{display:grid;gap:10px}
+.filter .reihe{margin:0;flex-wrap:nowrap}
+.filter select{flex:1;min-width:0}
+.bar{display:block;height:8px;background:var(--night);border-radius:999px;overflow:hidden;margin:6px 0 2px}
+.bar i{display:block;height:100%;background:var(--leaf);border-radius:999px}
+.bar.xp{height:12px}
+.bar.xp i{background:linear-gradient(90deg,var(--leaf),var(--pollen))}
+.tag{display:inline-block;font-size:11px;font-weight:600;border-radius:999px;padding:2px 8px;background:var(--panel-2);border:1px solid var(--line);margin:0 4px 4px 0;white-space:nowrap}
+.tag.neu{color:#0b130d;background:var(--leaf);border-color:var(--leaf)}
+.tag.gef{color:#fff;background:#8c3b2e;border-color:#a8483a}
+.sel-haeufig{color:#b9cdb1} .sel-mittel{color:#9fd18a} .sel-weniger{color:#79c3d6} .sel-selten{color:#c79ad0;border-color:#5d4466} .sel-sehrselten{color:#1a1204;background:var(--pollen);border-color:var(--pollen)}
+.leer{text-align:center;padding:40px 10px;color:var(--muted);display:grid;gap:12px;justify-items:center}
+.zurueck{color:var(--muted);text-decoration:none;font-size:14px}
+.zeile{display:flex;align-items:center;gap:12px;padding:8px 0;text-decoration:none;border-top:1px solid var(--line)}
+.karte h2 + .zeile{border-top:0}
+.zeile > span:not(.plus):not(.hab-z):not(.tag):not(.ava):not(.mini){flex:1;min-width:0;display:grid}
+.zeile small{color:var(--muted);font-size:12px}
+.plus{color:var(--pollen);font-weight:600;font-size:14px}
+.mini{width:44px;height:44px;border-radius:10px;object-fit:cover;flex:none}
+.nofoto{display:grid;place-items:center;background:var(--panel-2);font-family:var(--emoji);font-size:22px}
+.hab-z{font-family:var(--emoji);font-size:28px;width:44px;text-align:center;flex:none}
+
+/* ---------- Profilkarte ---------- */
+.profil-kopf{display:flex;gap:14px;align-items:center;text-decoration:none}
+.profil-kopf > div{flex:1;min-width:0}
+.profil-kopf h1{margin:0}
+.titel{color:var(--pollen);font-weight:600;margin:0}
+.lv{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.zahlen{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.zahlen a{background:var(--panel-2);border-radius:12px;padding:10px 4px;text-align:center;text-decoration:none;display:grid}
+.zahlen b{font:700 20px/1.1 var(--f-display)} .zahlen small{font-size:12px;color:var(--muted)}
+.zahlen span{font-size:11px;color:var(--muted)}
+.pro-mini{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border-color:#5b4a26;background:linear-gradient(135deg,#17211b,#221d12)}
+.pro-mini p{margin:0;flex:1 1 220px}
+.pro-teaser{display:grid;gap:12px;background:linear-gradient(135deg,#1b2117,#2a2210);border:1px solid #5b4a26;border-radius:16px;padding:16px}
+.pro-teaser p{color:var(--muted);margin:4px 0 0;font-size:14px}
+
+/* ---------- Kompendium ---------- */
+.raster{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.kachel{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;display:grid;grid-template-rows:auto 1fr}
+.kachel .bild{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.kachel .nofoto.bild{font-size:40px}
+.kachel .txt{padding:8px 10px;display:grid;gap:1px}
+.kachel b{font-size:14px;line-height:1.25}
+.kachel i{font-family:var(--f-sci);color:var(--muted);font-size:13px}
+.kachel .tags{margin-top:4px}
+details.karte summary{cursor:pointer;font-weight:600;display:flex;justify-content:space-between;gap:8px;list-style:none}
+details.karte summary::-webkit-details-marker{display:none}
+details.karte summary > span{margin-left:auto}
+details.karte summary::after{content:"▾";color:var(--muted)}
+details[open].karte summary::after{content:"▴"}
+details.karte[open] summary{margin-bottom:10px}
+.art figure{margin:-16px -16px 12px}
+.art figure img{width:100%;max-height:380px;object-fit:cover;border-radius:16px 16px 0 0;display:block}
+.art figcaption{font-size:11px;color:var(--muted);padding:4px 16px}
+.fund{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;border-top:1px solid var(--line);padding:10px 0}
+.fund > div{flex:1}
+.fund p{margin:4px 0}
+.gewaehlt{display:flex;gap:14px;align-items:center}
+.gewaehlt .bild{width:96px;height:96px;border-radius:12px;object-fit:cover;flex:none}
+.gewaehlt .nofoto.bild{font-size:40px}
+.suche{position:relative}
+.suche input{font-size:17px;padding:14px 16px;border-radius:14px}
+.vorschlag,.ortliste{list-style:none;margin:6px 0 0;padding:4px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.ortliste:empty{display:none}
+.vorschlag a,.ortliste button{display:flex;gap:10px;align-items:center;padding:8px;border-radius:10px;text-decoration:none;background:none;border:0;width:100%;text-align:left;cursor:pointer}
+.ortliste button{display:grid;gap:0}
+.ortliste small{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vorschlag a:hover,.ortliste button:hover{background:var(--panel-2)}
+.vorschlag img,.vorschlag .nofoto{width:44px;height:44px;border-radius:8px;object-fit:cover;flex:none}
+.vorschlag span{display:grid;flex:1;min-width:0}
+.vorschlag i{font-family:var(--f-sci);color:var(--muted);font-size:13px}
+.vorschlag li.muted{padding:8px}
+.ortwahl{margin:0;font-size:14px;color:var(--leaf)}
+.heimat{display:grid;gap:8px}
+
+/* ---------- Habitatkarten ---------- */
+.raster.karten{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.habkarte{display:grid;justify-items:center;text-align:center;gap:2px;padding:16px 10px 12px;border-radius:16px;text-decoration:none;
+  background:radial-gradient(circle at 50% 0%,#2a3d2c,var(--panel) 70%);border:1px solid #3d5a3f}
+.habkarte .hab-z{font-size:36px;width:auto}
+.habkarte small{color:var(--pollen);font-size:12px}
+.habkarte.zu{background:var(--panel);border-color:var(--line);opacity:.75}
+.habkarte.zu small{color:var(--muted)}
+.habkarte .bar{width:100%}
+.map{height:min(60vh,420px);border-radius:12px;overflow:hidden;margin:10px 0 6px;background:var(--panel-2)}
+
+/* ---------- Trophäen ---------- */
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);margin:0 -4px}
+.tabs a{padding:10px 12px;text-decoration:none;color:var(--muted);white-space:nowrap;display:grid;justify-items:center;font-weight:600;font-size:14px;border-bottom:2px solid transparent}
+.tabs a small{font-weight:400;font-size:11px}
+.tabs a.an{color:var(--ink);border-color:var(--pollen)}
+.fam summary b{font-family:var(--f-display)}
+.abz-liste{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.abz{display:flex;gap:10px;align-items:center;padding:8px;border-radius:12px;background:var(--panel-2)}
+.abz > div{display:grid;flex:1;min-width:0}
+.abz small{font-size:12px;color:var(--muted)}
+.abz.ok{background:linear-gradient(135deg,#1e2c22,#252412)}
+.abz.gesperrt{filter:saturate(.6)}
+.med{--c1:#6e7b74;--c2:#3b4641;width:48px;height:48px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:var(--emoji);font-size:24px;
+  background:radial-gradient(circle at 35% 30%,var(--c1),var(--c2));box-shadow:inset 0 0 0 3px rgba(255,255,255,.18),0 2px 6px rgba(0,0,0,.4)}
+.med.st-0{--c1:#7fd0c4;--c2:#2b6b63}
+.med.st-1{--c1:#e3a46f;--c2:#7a4a26}
+.med.st-2{--c1:#e6ecef;--c2:#7f8b92}
+.med.st-3{--c1:#ffe08a;--c2:#b17c1c}
+.med.st-4{--c1:#d6f1ff;--c2:#6b8fa6}
+.med.st-5{--c1:#f0d9ff;--c2:#6f4fb0;box-shadow:inset 0 0 0 3px rgba(255,255,255,.35),0 0 12px rgba(190,140,255,.55)}
+.med.offen{filter:grayscale(1) brightness(.6)}
+.titel-liste{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.titel-k{display:grid;text-align:left;gap:2px;padding:10px;border-radius:12px;background:var(--panel-2);border:1px solid var(--line);cursor:pointer}
+.titel-k small{color:var(--muted);font-size:12px}
+.titel-k:disabled{cursor:default;opacity:.55}
+.titel-k.ok{opacity:1;border-color:#5b4a26}
+.titel-k.ok b{color:var(--pollen)}
+.titel-k.an{background:#2a2210;border-color:var(--pollen)}
+.ava-raster{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.ava-k{display:grid;justify-items:center;text-align:center;gap:4px;padding:10px 6px;border-radius:14px;background:var(--panel);border:1px solid var(--line);cursor:pointer}
+.ava-k b{font-size:12px;line-height:1.2}
+.ava-k small{font-size:11px;color:var(--muted);line-height:1.25}
+.ava-k:disabled{cursor:default}
+.ava-k:not(.ok) .ava{filter:grayscale(1) brightness(.55)}
+.ava-k.an{border-color:var(--pollen);background:#211d12}
+.sr-1{color:#b8c3bd!important} .sr-2{color:#79c3d6!important} .sr-3{color:#c79ad0!important} .sr-4{color:var(--pollen)!important}
+.rang{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px}
+.rang li{display:flex;align-items:center;gap:10px;padding:8px;border-radius:12px;background:var(--panel-2)}
+.rang li > span:not(.platz):not(.xp):not(.ava){flex:1;min-width:0;display:grid}
+.rang li small{color:var(--muted);font-size:12px}
+.rang li.ich{background:#26301c;outline:1px solid var(--leaf)}
+.platz{font:700 16px/1 var(--f-display);width:26px;text-align:center;color:var(--muted)}
+.rang li:nth-child(1) .platz{color:#ffd36b} .rang li:nth-child(2) .platz{color:#dfe6ea} .rang li:nth-child(3) .platz{color:#e3a46f}
+.xp{font-weight:600;font-size:13px;white-space:nowrap}
+.schalter{display:flex;gap:12px;align-items:flex-start;font-weight:400;cursor:pointer}
+.schalter input{width:24px;height:24px;min-height:0;flex:none;accent-color:var(--pollen);margin-top:2px}
+.schalter span{display:grid}
+.schalter small{color:var(--muted);font-size:13px}
+.regeln{padding-left:18px;margin:0 0 10px;color:var(--muted);font-size:14px}
+
+/* ---------- Dialog, Toast ---------- */
+.dlg{border:1px solid var(--line);border-radius:20px;background:var(--panel);color:var(--ink);padding:0;width:min(440px,calc(100vw - 32px));max-height:85vh}
+.dlg::backdrop{background:rgba(0,0,0,.6)}
+.dlg-in{padding:20px;display:grid;gap:8px}
+.gross-xp{font:700 42px/1 var(--f-display);color:var(--pollen);margin:4px 0}
+.lvup{font:700 20px/1.2 var(--f-display);color:var(--pollen)}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:50;background:#22302a;border:1px solid var(--line);
+  padding:10px 16px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.5);max-width:calc(100vw - 32px);transition:opacity .4s}
+.toast.weg{opacity:0}
+
+/* ---------- Avatare: Szenen ---------- */
+.ava{--s:56px;width:var(--s);height:var(--s);border-radius:50%;padding:calc(var(--s)*.07);flex:none;display:inline-grid;position:relative;background:#3a2f22}
+.ava-in{border-radius:50%;display:grid;place-items:center;font-family:var(--emoji);font-size:calc(var(--s)*.46);line-height:1;overflow:hidden;color:#fff;font-weight:700}
+.sz-wiese{background:radial-gradient(circle at 50% 120%,#c9e27a 0 30%,transparent 31%),linear-gradient(#9fd3ef,#d8f0c6 70%)}
+.sz-wald{background:radial-gradient(circle at 70% 20%,#e9f5b0 0 10%,transparent 30%),linear-gradient(#2f6b3a,#173d22)}
+.sz-nacht{background:radial-gradient(circle at 75% 25%,#fff6c9 0 9%,transparent 10%),radial-gradient(circle at 25% 30%,#fff 0 1.5%,transparent 2.5%),linear-gradient(#0f1b3d,#1f2f5c)}
+.sz-wasser{background:repeating-radial-gradient(circle at 50% 110%,#5fc1e0 0 6%,#3b98c4 6% 12%)}
+.sz-morgen{background:linear-gradient(#ffb48a,#ffd89b 45%,#b9e0f0)}
+.sz-herbst{background:radial-gradient(circle at 30% 30%,#ffcd6b 0 12%,transparent 30%),linear-gradient(135deg,#c2551f,#7a3216)}
+.sz-schnee{background:radial-gradient(circle at 50% 130%,#fff 0 40%,transparent 41%),linear-gradient(#a9c6dd,#e6f0f8)}
+.sz-moor{background:radial-gradient(ellipse at 50% 100%,#6b7a3a 0 30%,transparent 60%),linear-gradient(#5d6f63,#2c3b33)}
+.sz-sonne{background:radial-gradient(circle at 50% 50%,#fff2a8 0 22%,#ffc94a 40%,#f08a2c)}
+.sz-gold{background:conic-gradient(from 210deg,#8a5a12,#f7d774,#b9821e,#fff1b0,#8a5a12)}
+.sz-sterne{background:radial-gradient(circle at 20% 30%,#fff 0 1.5%,transparent 2.5%),radial-gradient(circle at 70% 60%,#fff 0 1.2%,transparent 2%),radial-gradient(circle at 45% 15%,#cde 0 1%,transparent 2%),radial-gradient(circle at 80% 25%,#fff 0 1%,transparent 2%),linear-gradient(#120b2e,#2b1a5c)}
+.sz-polar{background:linear-gradient(160deg,transparent 30%,rgba(80,255,170,.6) 45%,transparent 60%),linear-gradient(200deg,transparent 35%,rgba(170,110,255,.55) 55%,transparent 70%),linear-gradient(#071a2b,#0e3346)}
+
+/* ---------- Umrandungen ---------- */
+.ra-kein{background:transparent}
+.ra-holz{background:repeating-conic-gradient(#7a5233 0 12deg,#5e3d24 12deg 24deg)}
+.ra-kiesel{background:radial-gradient(circle at 30% 30%,#c9c9c4,#6b6b66)}
+.ra-moos{background:radial-gradient(circle at 30% 20%,#8fbf4a,#3d6b23)}
+.ra-gras{background:repeating-conic-gradient(#6fae3a 0 6deg,#3f7d22 6deg 12deg)}
+.ra-rinde{background:repeating-conic-gradient(#4a3423 0 4deg,#6d4f36 4deg 7deg,#3a281a 7deg 12deg)}
+.ra-lehm{background:linear-gradient(135deg,#b97a4a,#7c4a28)}
+.ra-sand{background:radial-gradient(circle at 30% 30%,#f2dca5,#c4a462)}
+.ra-schilf{background:repeating-conic-gradient(#b8a76a 0 5deg,#7d7a3e 5deg 9deg)}
+.ra-feder{background:conic-gradient(#ddd,#8a8a8a,#f4f4f4,#9a9a9a,#ddd)}
+.ra-bronze{background:conic-gradient(from 30deg,#7a4a26,#e3a46f,#9a5f32,#f0c08c,#7a4a26)}
+.ra-silber{background:conic-gradient(from 30deg,#7f8b92,#f4f8fa,#9aa6ad,#ffffff,#7f8b92)}
+.ra-gold{background:conic-gradient(from 30deg,#8a5a12,#ffe08a,#b17c1c,#fff3c4,#8a5a12)}
+.ra-bernstein{background:radial-gradient(circle at 30% 25%,#ffd27a,#d17a12 60%,#7a3a06)}
+.ra-tau{background:radial-gradient(circle at 20% 20%,#fff 0 6%,transparent 7%),radial-gradient(circle at 80% 70%,#fff 0 5%,transparent 6%),linear-gradient(#8fd3f0,#3a8fb8)}
+.ra-kastanie{background:radial-gradient(circle at 35% 30%,#b0622d,#5a2a10)}
+.ra-heide{background:repeating-conic-gradient(#b36bb0 0 10deg,#7d3f86 10deg 20deg)}
+.ra-lavendel{background:repeating-conic-gradient(#9b8ce0 0 8deg,#6a5bb5 8deg 16deg)}
+.ra-kornblume{background:repeating-conic-gradient(#4d7fe0 0 15deg,#2a4fae 15deg 30deg)}
+.ra-mohn{background:repeating-conic-gradient(#e0352b 0 20deg,#a51c14 20deg 30deg,#1d1d1d 30deg 36deg)}
+.ra-birke{background:repeating-conic-gradient(#f0efe8 0 18deg,#222 18deg 22deg,#e3e1d6 22deg 34deg,#333 34deg 36deg)}
+.ra-efeu{background:repeating-conic-gradient(#2f6b2a 0 14deg,#5ea24a 14deg 22deg)}
+.ra-marienkaefer{background:radial-gradient(circle,#111 0 18%,transparent 19%) 0 0/33% 33%,#d4251b}
+.ra-wabe{background:repeating-conic-gradient(#f0b52a 0 30deg,#c98a0e 30deg 60deg)}
+.ra-streifen{background:repeating-conic-gradient(#f2c418 0 15deg,#1d1d1d 15deg 30deg)}
+.ra-herbstlaub{background:conic-gradient(#c2551f,#f0a12c,#7a3216,#e0352b,#d9b03a,#c2551f)}
+.ra-bluete{background:conic-gradient(#ffb6d0,#fff,#ffd34d,#c6a4ff,#ffb6d0)}
+.ra-sommerwiese{background:conic-gradient(#7fc34a,#ffe05a,#4d9ee0,#e04d6e,#7fc34a)}
+.ra-frost{background:conic-gradient(#e9f6ff,#9fd0f0,#ffffff,#7fb8e0,#e9f6ff);box-shadow:0 0 10px rgba(170,220,255,.6)}
+.ra-morgenroete{background:conic-gradient(#ff8a5c,#ffd27a,#ff5c8a,#ff8a5c)}
+.ra-abendrot{background:conic-gradient(#ff5a36,#8b2f8f,#ffb347,#ff5a36)}
+.ra-tiefsee{background:conic-gradient(#0a3d62,#1e90ff,#0a3d62,#00d2d3,#0a3d62)}
+.ra-pilzring{background:radial-gradient(circle,#fff 0 22%,transparent 24%) 0 0/25% 25%,#b3261e}
+.ra-federkranz{background:repeating-conic-gradient(#e8e2d0 0 8deg,#8a6a3c 8deg 10deg,#c9b48a 10deg 16deg)}
+.ra-schuppen{background:radial-gradient(circle at 50% 0,#6fcf6a 0 40%,#2d6b2a 41%) 0 0/20% 20%}
+.ra-netz{background:repeating-conic-gradient(#d9dde0 0 2deg,transparent 2deg 30deg),repeating-radial-gradient(circle,#d9dde0 0 1.2px,#20272b 1.2px 6px)}
+.ra-libelle{background:conic-gradient(#7af0e0,#b48aff,#7ad0ff,#e0ff9a,#7af0e0)}
+.ra-falter{background:conic-gradient(#ff7a2f,#1d1d1d,#4dbbff,#1d1d1d,#ffd23f,#ff7a2f)}
+.ra-platin{background:conic-gradient(from 30deg,#6b8fa6,#e8f6ff,#8fb0c4,#ffffff,#6b8fa6)}
+.ra-rubin{background:radial-gradient(circle at 30% 25%,#ff8a9a,#c3002f 55%,#5a0016);box-shadow:0 0 10px rgba(255,60,90,.45)}
+.ra-smaragd{background:radial-gradient(circle at 30% 25%,#9affc4,#0f9d58 55%,#064d2b);box-shadow:0 0 10px rgba(60,255,150,.4)}
+.ra-saphir{background:radial-gradient(circle at 30% 25%,#9ad0ff,#1e5ad6 55%,#0a2463);box-shadow:0 0 10px rgba(80,140,255,.45)}
+.ra-mond{background:conic-gradient(#d8dcf0,#4a4f7a,#f4f4ff,#4a4f7a,#d8dcf0);box-shadow:0 0 12px rgba(200,210,255,.45)}
+
+/* Legendär – bewegt (ruhig, wenn jemand weniger Bewegung möchte) */
+@property --w{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes drehen{to{--w:360deg}}
+@keyframes leuchten{0%,100%{box-shadow:0 0 6px var(--g)}50%{box-shadow:0 0 18px var(--g),0 0 4px var(--g)}}
+.ra-gluehwuermchen,.ra-regenbogen,.ra-polarlicht,.ra-diamant,.ra-sternenhimmel,.ra-sonnenkrone,.ra-phoenix,.ra-einhorn,.ra-gaia,.ra-jahresrad{animation:drehen 6s linear infinite,leuchten 3s ease-in-out infinite}
+.ra-gluehwuermchen{--g:#d9ff6b;background:radial-gradient(circle,#f4ff9a 0 10%,transparent 12%) 0 0/30% 30%,conic-gradient(from var(--w),#1b2a12,#3b5a1c,#1b2a12)}
+.ra-regenbogen{--g:#fff;background:conic-gradient(from var(--w),#ff4d4d,#ffb84d,#fff64d,#4dff88,#4dc3ff,#a64dff,#ff4d4d)}
+.ra-polarlicht{--g:#5affc0;background:conic-gradient(from var(--w),#0e3346,#36f5a8,#8a5cff,#0e3346,#36f5a8)}
+.ra-diamant{--g:#d6f1ff;background:conic-gradient(from var(--w),#fff,#bfe6ff,#ffffff,#d9c9ff,#bfffef,#fff)}
+.ra-sternenhimmel{--g:#9a8cff;background:radial-gradient(circle,#fff 0 6%,transparent 8%) 0 0/28% 28%,conic-gradient(from var(--w),#120b2e,#3a2a8a,#120b2e)}
+.ra-sonnenkrone{--g:#ffc94a;background:repeating-conic-gradient(from var(--w),#ffe27a 0 10deg,#f08a2c 10deg 20deg)}
+.ra-phoenix{--g:#ff6a2c;background:conic-gradient(from var(--w),#ff2c2c,#ffb02c,#fff1a8,#ff6a2c,#ff2c2c)}
+.ra-einhorn{--g:#ffb6f0;background:conic-gradient(from var(--w),#ffd1f4,#c9b6ff,#b6f0ff,#fff2b6,#ffd1f4)}
+.ra-gaia{--g:#7fffa0;background:conic-gradient(from var(--w),#1e90ff,#2ecc71,#f1c40f,#2ecc71,#1e90ff)}
+.ra-jahresrad{--g:#ffe08a;background:conic-gradient(from var(--w),#7fc34a 0 25%,#ffd34d 0 50%,#c2551f 0 75%,#cfe6f8 0)}
+@media (prefers-reduced-motion:reduce){[class*="ra-"]{animation:none!important}}

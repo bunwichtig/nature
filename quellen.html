@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Herkunft & Quellen · Pure Nature – Kompendium</title>
+<link rel="stylesheet" href="css/app.css">
+<style>body{padding-bottom:30px} main{max-width:760px} li{margin-bottom:6px} .karte ul{padding-left:18px;margin:0}</style>
+</head>
+<body>
+<header class="top"><a class="brand" href="./">Pure Nature <span>Kompendium</span></a></header>
+<main class="wrap">
+  <div class="kopfzeile"><h1>Herkunft & Quellen</h1><p class="muted">Woher das Spiel kommt, welche Ideen drinstecken, wie es sich zusammensetzt – und welche freien Daten es nutzt. Privates, nicht-kommerzielles Projekt. Dein Spielstand liegt nur auf deinem Gerät (Browser-Speicher) – es gibt keinen eigenen Server.</p></div>
+
+  <section class="karte"><h2>Herkunft</h2><ul>
+    <li><b><a href="archiv/mockup/">Das ursprüngliche Mockup</a></b> („BioDex MMO“) – der erste Entwurf mit Dashboard, Foto-Scanner, Natur-Kodex, Medaillen und Community-Hub. Daraus ist dieses Spiel entstanden; es bleibt zum Vergleich erhalten.</li>
+    <li><b><a href="https://bunwichtig.github.io/naturewissen/">Pure Nature</a></b> (<a href="https://github.com/bunwichtig/naturewissen">Repo</a>) – der „Bauplan 2“ mit seinen Regeln: nur freie und legale Daten, keine CDNs, statische Seite ohne Build, Handy zuerst, Deutsch in einfacher Sprache. Von dort stammen die Abfrage-Warteschlange (iNaturalist höchstens etwa 1/s), die Wuchsform-Listen, die Schriften und MapLibre.</li>
+  </ul></section>
+
+  <section class="karte"><h2>Die Idee</h2><ul>
+    <li><b>Standard – dein Kompendium:</b> Alles, was du draußen entdeckst, trägst du mit Zeit, Ort und Notiz ein. So entsteht dein persönliches Naturbuch zum Sammeln und Festhalten.</li>
+    <li><b>Erfahrungspunkte schalten Habitatkarten frei:</b> Jede neue Art bringt XP – mehr für seltene Arten, gefährdete Arten und Arten aus neuen Familien, Ordnungen und Klassen. Mit den XP öffnen sich Habitatkarten, die zeigen, wo in deiner Umgebung Vögel, Pflanzen, Pilze, Bäume, Reptilien, Amphibien und viele weitere Gruppen zu finden sind.</li>
+    <li><b>Pro – Trophäen und Bestenliste:</b> Abzeichen, Titel, Avatare und Umrandungen. Titel gibt es auf zwei Wegen: durch Abzeichen und durch Level und Erfahrungspunkte. Avatare und Umrandungen werden durch Abzeichen, Level und besondere Momente freigeschaltet. Dazu eine Bestenliste mit Freunden (per Code) und mit Forschenden in deiner Umgebung (iNaturalist).</li>
+    <li><b>Nichts geht verloren:</b> Auch in Standard zählt das Spiel alles mit. Wer Pro einschaltet, bekommt sofort alles, was schon verdient ist.</li>
+  </ul></section>
+
+  <section class="karte"><h2>Wie es sich zusammensetzt</h2><ul>
+    <li><b>70 Sammel-Gruppen</b> (z. B. Eulen, Spechte, Libellen, Hummeln, Orchideen, Röhrlinge, Flechten), jede mit 5 Stufen von Bronze bis Diamant. Eine Art gehört zu einer Gruppe, wenn sie selbst oder einer ihrer Vorfahren bei iNaturalist dazu passt; Bäume, Sträucher und Co. kommen aus den Wuchsform-Listen der WCVP.</li>
+    <li><b>566 Abzeichen:</b> 350 Sammler-Abzeichen aus den Gruppen, dazu Meilensteine, Monate und Jahreszeiten, besondere Tage (vom Tag der Artenvielfalt bis Halloween), Tageszeiten, Serien, Rekordtage, Orte, Seltenheit, Rote Liste, Systematik, Wortspiele mit deutschen Artnamen und 20 Sammelsets (z. B. „Große Fünf des Waldes“).</li>
+    <li><b>214 Titel</b> aus Level, XP und Abzeichen · <b>271 Avatare</b> (ein Zeichen vor einer von 12 Szenen) · <b>53 Umrandungen</b> in vier Seltenheiten, die legendären bewegen sich.</li>
+    <li><b>41 Habitatkarten</b> von 0 bis 100.000 XP und <b>100 Level</b>.</li>
+    <li>Die vollständige Liste mit allen Bedingungen: <a href="https://github.com/bunwichtig/nature/blob/main/KATALOG.md">KATALOG.md</a>. Der Katalog selbst liegt in <code>js/katalog/</code>, die Regeln in <code>js/regeln.js</code>.</li>
+  </ul></section>
+
+  <h2 style="margin-top:8px">Quellen & Lizenzen</h2>
+
+  <section class="karte"><h2>Live-Daten</h2><ul>
+    <li><b><a href="https://www.inaturalist.org">iNaturalist</a></b> – Artsuche, deutsche Namen, Systematik, Gefährdung, Beobachtungszahlen (Seltenheit), Fundraster der Habitatkarten, häufige Arten im Umkreis, Bestenliste der Umgebung, Übernahme eigener Beobachtungen. Fotos nur mit Creative-Commons-Lizenz (CC0, CC BY, CC BY-NC …), immer mit Urheber und Lizenz. Höchstens etwa eine Anfrage pro Sekunde. <a href="https://www.inaturalist.org/pages/terms">Nutzungsbedingungen</a> · <a href="https://www.inaturalist.org/pages/api+recommended+practices">API-Regeln</a></li>
+    <li><b><a href="https://nominatim.openstreetmap.org">Nominatim</a> & <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a></b> (ODbL) – Ortssuche erst nach dem Absenden, Ortsname zum Standort, höchstens 1 Anfrage pro Sekunde. <a href="https://operations.osmfoundation.org/policies/nominatim/">Nutzungsregeln</a></li>
+    <li><b><a href="https://openfreemap.org">OpenFreeMap</a></b> – Kartenbild der Habitatkarten (Daten OpenStreetMap / OpenMapTiles).</li>
+  </ul></section>
+
+  <section class="karte"><h2>Feste Daten im Repo</h2><ul>
+    <li><b>World Checklist of Vascular Plants (WCVP)</b>, Royal Botanic Gardens, Kew – CC BY 4.0. Wuchsformen (Bäume, Sträucher, Wasser- & Sumpfpflanzen, Zwiebel & Knolle, Kletterpflanzen) für die Sammel-Abzeichen. Govaerts, R. et al. (2021): Scientific Data 8: 215. Aufbereitet in <a href="https://github.com/bunwichtig/naturewissen">bunwichtig/naturewissen</a>.</li>
+  </ul></section>
+
+  <section class="karte"><h2>Technik</h2><ul>
+    <li><b>MapLibre GL JS 5.6.0</b> – BSD-3-Clause, liegt unter <code>vendor/</code> (kein CDN). <a href="vendor/maplibre-LICENSE.txt">Lizenz</a></li>
+    <li><b>Schriften</b> Bricolage Grotesque, Figtree, Newsreader – SIL Open Font License, liegen unter <code>fonts/</code>, nichts von Google.</li>
+    <li><b>Zeichen</b> der Abzeichen und Avatare sind Emoji der Systemschrift deines Geräts; Umrandungen und Szenen sind selbst gezeichnete CSS-Verläufe.</li>
+  </ul></section>
+  <p><a href="./">← Zurück zum Spiel</a></p>
+</main>
+</body>
+</html>
