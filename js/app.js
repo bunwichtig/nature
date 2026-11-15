@@ -12,6 +12,7 @@ import { TITEL, TIT } from "./katalog/titel.js";
 import { AVATARE, AVA, SZENEN } from "./katalog/avatare.js";
 import { RAHMEN, RAH, SELTENHEIT } from "./katalog/rahmen.js";
 import { HABITATE, HAB } from "./katalog/habitate.js";
+import { initVerbinden, online, einladen, abschliessen, annehmen, antwortWeitergeben, senden, trennen, wartet } from "./verbinden.js";
 import { initBestimmen, bestimmenHTML, bestimmenLaden, bestimmenKlick, bestimmenProSeite, seiten, BF_SELECTOR } from "./bestimmen.js";
 
 const main = $("#main");
@@ -64,6 +65,7 @@ function kopf(){
   for (const a of $$(".nav a")) a.classList.toggle("an", a.dataset.r === route || (a.dataset.r === "kompendium" && route === "art") || (a.dataset.r === "karten" && route === "karte"));
   kopfSpieler();
 }
+const freundeOffline = () => { const on = new Set(onlineSpieler().map(o => o.n)); return (spiel().freunde || []).filter(f => !on.has(f.n)); };
 /** Oben links: wer spielt mit? Avatar-Stapel, aufklappbar zur Liste */
 function kopfSpieler(){
   const box = $("#kopf-spieler"); if (!box) return;
@@ -71,14 +73,17 @@ function kopfSpieler(){
   const ich = lokal.find(x => x.p.id === spiel().id);
   const stapel = [ich, ...lokal.filter(x => x !== ich)].slice(0, 3);
   box.innerHTML = `<summary aria-label="Wer spielt mit?"><span class="stapel">${stapel.map(x => avatarHTML(26, x.av, x.ra)).join("")}</span>
-    <span class="wer"><b>${esc(spiel().einst.name || "Naturfreund")}</b><small>${lokal.length} Spieler · ${geg.length} Gegner ▾</small></span></summary>
+    <span class="wer"><b>${esc(spiel().einst.name || "Naturfreund")}</b><small>${lokal.length + onlineSpieler().length} Spieler${online().length ? ` (${onlineSpieler().length} online)` : ""} · ${geg.length} Gegner ▾</small></span></summary>
   <div class="spieler-menue">
     <p class="menue-titel">Spielen auf diesem Gerät</p>
     ${lokal.map(({ p, C:c, av, ra }) => `<button class="menue-zeile${p.id === spiel().id ? " an" : ""}" data-spieler="${p.id}">${avatarHTML(32, av, ra)}<span><b>${esc(p.einst.name || "Naturfreund")}</b><small>Lv ${c.level} · ${fmt(c.S.arten.size)} Arten</small></span>${p.id === spiel().id ? `<em>spielt</em>` : ""}</button>`).join("")}
     <button class="menue-zeile neu" data-act="mitspielen"><span class="plus-rund">＋</span><span><b>Mitspielen</b><small>Name, Figur, los</small></span></button>
+    <p class="menue-titel">Online verbunden</p>
+    ${onlineSpieler().map(o => `<div class="menue-zeile">${avatarHTML(32, o.av, o.ra)}<span><b>${esc(o.n)}</b><small>Lv ${o.c.level} · ${fmt(o.c.xp)} XP · ${fmt(o.c.S.arten.size)} Arten</small></span><em>🟢</em></div>`).join("")}
+    <button class="menue-zeile neu" data-act="verbinden"><span class="plus-rund">📶</span><span><b>Mit anderem Gerät verbinden</b><small>wie bei Bomberman – Punkte live teilen</small></span></button>
     <p class="menue-titel">Gegner</p>
     ${geg.map(g => `<a class="menue-zeile" href="#gegner/${g.id}">${avatarHTML(32, g.avatarId, g.rahmenId)}<span><b>${esc(g.name)}</b><small>Lv ${g.C.level} · ${fmt(g.C.S.arten.size)} Arten</small></span></a>`).join("")}
-    ${(spiel().freunde || []).length ? `<p class="menue-titel">Freunde</p>${spiel().freunde.map(f => `<a class="menue-zeile" href="#trophaeen/bestenliste"><span class="plus-rund">👤</span><span><b>${esc(f.n)}</b><small>${fmt(f.x)} XP</small></span></a>`).join("")}` : ""}
+    ${freundeOffline().length ? `<p class="menue-titel">Freunde</p>${freundeOffline().map(f => `<a class="menue-zeile" href="#trophaeen/bestenliste"><span class="plus-rund">👤</span><span><b>${esc(f.n)}</b><small>${fmt(f.x)} XP</small></span></a>`).join("")}` : ""}
     <a class="menue-fuss" href="#trophaeen/bestenliste">Zur Bestenliste →</a>
   </div>`;
   box.open = offen;
@@ -146,17 +151,23 @@ function lokaleStaende(){
       ra: pr && c.rahmen.has(p.einst.rahmen) ? p.einst.rahmen : "holz" };
   });
 }
+/** Spieler auf verbundenen Geräten (nur solange beide online sind) */
+const onlineSpieler = () => online().flatMap(v => v.spieler.map(x => ({ v, n:String(x.n || "Naturfreund").slice(0, 40), av:AVA[x.av] ? x.av : "start-spross", ra:RAH[x.ra] ? x.ra : "holz",
+  c:{ level:+x.l || 1, xp:+x.x || 0, S:{ arten:{ size:+x.a || 0 } }, abz:{ size:+x.ab || 0 } } })));
 const fruehesterStart = () => alleSpieler().map(p => p.einst.seit).sort()[0];
 function arenaHTML(){
   return `<section class="arena" aria-label="Spieler">${lokaleStaende().map(({ p, C:c, av, ra }) => `
     <button class="spieler-chip${p.id === spiel().id ? " an" : ""}" data-spieler="${p.id}">${avatarHTML(38, av, ra)}<span><b>${esc(p.einst.name || "Naturfreund")}</b><small>Lv ${c.level}</small></span></button>`).join("")}
+    ${onlineSpieler().map(o => `<span class="spieler-chip online">${avatarHTML(38, o.av, o.ra)}<span><b>${esc(o.n)}</b><small>online · Lv ${o.c.level}</small></span></span>`).join("")}
     <button class="spieler-chip neu" data-act="mitspielen"><span class="plus-rund">＋</span><span><b>Mitspielen</b><small>dazukommen</small></span></button>
+    <button class="spieler-chip neu" data-act="verbinden"><span class="plus-rund">📶</span><span><b>Verbinden</b><small>anderes Gerät</small></span></button>
     ${gegnerStand(fruehesterStart()).map(g => `<a class="spieler-chip gegner" href="#gegner/${g.id}">${avatarHTML(38, g.avatarId, g.rahmenId)}<span><b>${esc(g.name.split(" ")[0])}</b><small>Gegner · Lv ${g.C.level}</small></span></a>`).join("")}
   </section>`;
 }
 function wettstreitHTML(max = 99){
   const zeilen = [
     ...lokaleStaende().map(({ p, C:c, av, ra }) => ({ name:p.einst.name || "Naturfreund", ich:p.id === spiel().id, av, ra, c, link:null, sub:p.id === spiel().id ? "du" : "Mitspieler" })),
+    ...onlineSpieler().map(o => ({ name:o.n, av:o.av, ra:o.ra, c:o.c, link:null, sub:"🟢 online" })),
     ...gegnerStand(fruehesterStart()).map(g => ({ name:g.name, av:g.avatarId, ra:g.rahmenId, c:g.C, link:`#gegner/${g.id}`, sub:g.titel || "Gegner", gegner:true }))
   ].sort((a, b) => b.c.xp - a.c.xp);
   return `<section class="karte"><h2>Wettstreit</h2>
@@ -197,6 +208,62 @@ function mitspielenDialog(){
     d.close(); mitspielen(name, av); location.hash = "#start"; toast(`👋 Willkommen, ${esc(name)}!`);
   });
 }
+
+// ---------- Direkt verbinden (wie bei Bomberman) ----------
+const linkVon = (art, c) => `${location.origin}${location.pathname}#${art}=${c}`;
+const teilenKnopf = (link, text) => `<div class="v-link"><input readonly value="${esc(link)}" aria-label="Link"><button type="button" class="btn" data-act="v-teilen" data-link="${esc(link)}" data-text="${esc(text)}">Link schicken</button></div>`;
+let verbindenDlg = null;
+function verbindenDialog(){
+  verbindenDlg = dialog(`<h2>📶 Mit anderem Gerät verbinden</h2>
+    <p class="muted">Wie bei Bomberman: Die Geräte verbinden sich direkt miteinander, ohne Server. Solange beide online sind, seht ihr gegenseitig eure Punkte, Level und Arten – live.</p>
+    <fieldset class="netz"><legend>Wo seid ihr?</legend>
+      <label><input type="radio" name="vnetz" value="wlan" checked><span>Im selben WLAN<small>kein fremder Dienst</small></span></label>
+      <label><input type="radio" name="vnetz" value="internet"><span>Übers Internet<small>Ein STUN-Dienst von Cloudflare hilft beim Finden. Spieldaten gehen dort nicht hin.</small></span></label></fieldset>
+    <p><b>1.</b> Einladung erstellen und an das andere Gerät schicken.</p>
+    <div id="v-ein"><button class="btn" data-act="v-einladen">Einladung erstellen</button></div>
+    <p><b>2.</b> Das andere Gerät öffnet den Link und schickt dir einen Antwort-Link zurück. Öffne ihn – oder füge ihn hier ein:</p>
+    <div class="v-link"><input id="v-antwort" placeholder="Antwort-Link einfügen" aria-label="Antwort-Link"><button class="btn leise" data-act="v-fertig">Verbinden</button></div>
+    <p id="v-status" class="klein muted">Lass dieses Fenster offen, bis ihr verbunden seid.</p>
+    <div class="reihe"><button class="btn leise" data-close>Schließen</button></div>`);
+  verbindenDlg.addEventListener("close", () => { verbindenDlg = null; });
+}
+async function einladungAnnehmen(c){
+  const d = verbindenDlg = dialog(`<h2>📶 Einladung</h2><p id="v-status" class="muted">Antwort wird vorbereitet …</p><div id="v-ein"></div><div class="reihe"><button class="btn leise" data-close>Schließen</button></div>`);
+  d.addEventListener("close", () => { verbindenDlg = null; });
+  try{
+    const a = await annehmen(c);
+    d.querySelector("#v-status").innerHTML = `<b>${esc(a.von)}</b> lädt dich ein. Schick diesen Antwort-Link zurück. Sobald ihr verbunden seid, steht es hier.`;
+    d.querySelector("#v-ein").innerHTML = teilenKnopf(linkVon("antwort", a.code), "Meine Antwort fürs Naturspiel – einfach öffnen:");
+  }catch(err){ d.querySelector("#v-status").textContent = "Das hat nicht geklappt: " + err.message; }
+}
+async function antwortAusLink(c){
+  history.replaceState(null, "", "#start");
+  try{
+    const hier = await antwortWeitergeben(c);
+    toast(hier ? "Verbinde …" : "Antwort an das wartende Fenster weitergegeben. Du kannst diesen Tab schließen.", 6000);
+  }catch(err){ toast("Das hat nicht geklappt: " + esc(err.message)); }
+}
+const geraetStand = () => ({
+  name: alleSpieler().map(p => p.einst.name || "Naturfreund").join(" & "),
+  spieler: lokaleStaende().map(({ p, C:c, av, ra }) => ({ n:p.einst.name || "Naturfreund", l:c.level, x:c.xp, a:c.S.arten.size, ab:c.abz.size, av, ra }))
+});
+function onlineMerken(v){
+  // Punkte der anderen bleiben nach dem Trennen in der Freunde-Bestenliste
+  if (!v?.spieler?.length) return;
+  const s = spiel(), heute = new Date().toISOString().slice(0, 10);
+  for (const x of v.spieler){ const n = String(x.n || "").slice(0, 40); if (!n) continue;
+    s.freunde = s.freunde.filter(f => f.n !== n); s.freunde.push({ n, l:+x.l || 1, x:+x.x || 0, a:+x.a || 0, ab:+x.ab || 0, av:x.av, r:x.ra, d:heute }); }
+  speichern();
+}
+initVerbinden({ stand:geraetStand, neu:(art, v, err) => {
+  if (art === "offen"){ toast("📶 Verbunden! Ihr seht jetzt gegenseitig eure Punkte."); verbindenDlg?.close(); }
+  if (art === "zu" && v){ toast(`📴 ${esc(v.name)} ist offline.`); onlineMerken(v); }
+  if (art === "fehler"){ const st = $("#v-status"); if (st) st.textContent = "Das hat nicht geklappt: " + err.message; }
+  if (art === "stand" && !v.gemerkt){ v.gemerkt = true; onlineMerken(v); return; }
+  kopfSpieler();
+  const r = location.hash.slice(1) || "start";
+  if (r === "start" || r === "trophaeen/bestenliste") render();
+} });
 
 // ---------- Kompendium ----------
 const kf = { q:"", bereich:"alle", gruppe:"", sort:"neu" };
@@ -566,6 +633,8 @@ async function importieren(){
 function render(){
   const [route, arg, arg2] = (location.hash.slice(1) || "start").split("/");
   if (route.startsWith("freund=")) return freundAusLink(route.slice(7));
+  if (route.startsWith("verbinden=")){ history.replaceState(null, "", "#start"); render(); return einladungAnnehmen(route.slice(10)); }
+  if (route.startsWith("antwort=")){ antwortAusLink(route.slice(8)); return render(); }
   const seiten = { start:seiteStart, kompendium:seiteKompendium, art:seiteArt, eintragen:seiteEintragen, karten:seiteKarten,
     karte:seiteKarte, trophaeen:seiteTrophaeen, profil:seiteProfil, gegner:seiteGegner };
   main.innerHTML = (seiten[route] || seiteStart)(arg, arg2);
@@ -649,6 +718,19 @@ document.addEventListener("click", async e => {
   try{
     switch (d.act){
       case "mitspielen": mitspielenDialog(); break;
+      case "verbinden": verbindenDialog(); break;
+      case "v-einladen": {
+        const box = $("#v-ein"); box.innerHTML = `<p class="muted">Einladung wird vorbereitet …</p>`;
+        const c = await einladen($("[name=vnetz]:checked")?.value === "internet");
+        box.innerHTML = teilenKnopf(linkVon("verbinden", c), "Spiel mit mir im Naturspiel – öffne diesen Link:");
+        break;
+      }
+      case "v-teilen": {
+        if (navigator.share) await navigator.share({ title:"Naturspiel verbinden", text:d.text, url:d.link }).catch(() => {});
+        else { await navigator.clipboard?.writeText(d.link); toast("Link kopiert."); }
+        break;
+      }
+      case "v-fertig": { const st = $("#v-status"); await abschliessen($("#v-antwort").value); if (st) st.textContent = "Verbinde …"; break; }
       case "spieler-weg": if (confirm(`${spiel().einst.name || "Diesen Spieler"} mit allen Funden vom Gerät entfernen?`)) spielerEntfernen(spiel().id); break;
       case "pro-an": einstellen({ pro:true }); toast("✨ Pro-Vorschau ist an"); break;
       case "standort": $("#ortwahl").textContent = "Bestimme Standort …"; ortWahl = await standort(); $("#ortwahl").textContent = "✓ " + ortWahl.ort; break;
@@ -707,5 +789,5 @@ document.addEventListener("toggle", e => {
   if (kartenOffen) karteZeichnen(location.hash.split("/")[1]); else { karteObj?.remove?.(); karteObj = null; }
 }, true);
 window.addEventListener("hashchange", () => { window.scrollTo(0, 0); render(); });
-beiAenderung(() => render());
+beiAenderung(() => { render(); senden(); });
 render();

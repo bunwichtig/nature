@@ -13,6 +13,9 @@ Aufgebaut nach dem Bauplan von [bunwichtig/naturewissen](https://github.com/bunw
 - Start: „Was hast du gefunden?“ – Suche oder Schnellauswahl häufiger Arten (`js/katalog/arten.js`, klappt notfalls auch ohne Verbindung).
 - Drei Gegner mit festem Zufall, die täglich weitersammeln (`js/gegner.js`).
 - „＋ Mitspielen“: mehrere Spieler auf einem Gerät (`js/speicher.js`).
+- „📶 Verbinden“: zwei Geräte direkt per WebRTC, Handschlag über zwei Links, Punkte live teilen (`js/verbinden.js`).
+- Oben links: wer mitspielt (Spieler, online verbundene Geräte, Gegner, Freunde).
+- „Schritt für Schritt bestimmen“ im Reiter Eintragen (`js/bestimmen.js`, Merkmale aus `daten/merkmale.js`), Artenlisten mit Seiten.
 - Gemeinsame Bestenliste: `bestenliste.json`, geschrieben von `.github/workflows/bestenliste.yml` aus Issues mit dem Titel „Bestenliste: …“. Dafür müssen Issues im Repo eingeschaltet sein.
 
 ## Wo was steht

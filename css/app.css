@@ -388,3 +388,13 @@ details.karte[open] summary{margin-bottom:10px}
 .frage>span{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
 .frage .chip small{opacity:.6;margin-left:2px}
 .bestimmen .liste .zeile:first-child{border-top:0}
+
+/* ---------- Direkt verbinden ---------- */
+.spieler-chip.online{border-color:#3f6b45;background:#162419}
+.v-link{display:flex;gap:6px;margin:6px 0 12px}
+.v-link input{flex:1;min-width:0;font-size:13px}
+.v-link .btn{flex:none}
+.netz{border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:10px 0}
+.netz label{display:flex;gap:8px;align-items:flex-start;margin:6px 0;font-size:14px}
+.netz input{width:auto;min-height:0;margin-top:3px}
+.netz small{display:block;color:var(--muted);font-size:12px}
