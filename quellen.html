@@ -29,6 +29,11 @@
     <li><b>566 Abzeichen:</b> 350 Sammler-Abzeichen aus den Gruppen, dazu Meilensteine, Monate und Jahreszeiten, besondere Tage (vom Tag der Artenvielfalt bis Halloween), Tageszeiten, Serien, Rekordtage, Orte, Seltenheit, Rote Liste, Systematik, Wortspiele mit deutschen Artnamen und 20 Sammelsets (z. B. „Große Fünf des Waldes“).</li>
     <li><b>214 Titel</b> aus Level, XP und Abzeichen · <b>271 Avatare</b> (ein Zeichen vor einer von 12 Szenen) · <b>53 Umrandungen</b> in vier Seltenheiten, die legendären bewegen sich.</li>
     <li><b>41 Habitatkarten</b> von 0 bis 100.000 XP und <b>100 Level</b>.</li>
+    <li><b>Drei Gegner</b> – Fritzi Fernglas (Vögel, früh am Morgen), Opa Moosbart (Pflanzen und Pilze) und Nox die Nachteule (nachts unterwegs). Sie starten mit Vorsprung und sammeln jeden Tag weiter, aus einer eingebauten Liste von 90 häufigen Arten. Ihr Zufall ist fest, darum sehen alle Geräte dieselben Gegner.</li>
+    <li><b>Mitspielen wie bei Bomberman:</b> Oben auf der Startseite einfach „＋ Mitspielen“ – Name, Figur, los. Jeder Spieler hat sein eigenes Kompendium auf dem Gerät.</li>
+    <li><b>Direkt verbinden:</b> Zwei Geräte verbinden sich wie bei Bomberman direkt miteinander (WebRTC), ohne eigenen Server. Den Handschlag erledigen zwei Links, die man sich schickt. Solange beide online sind, seht ihr gegenseitig eure Punkte live; danach bleibt der letzte Stand in der Freunde-Bestenliste. Oben links siehst du jederzeit, wer mitspielt.</li>
+    <li><b>Schritt für Schritt bestimmen:</b> Im Reiter Eintragen wählst du erst die Gruppe, dann nur die Merkmale, die in dieser Gruppe wirklich etwas unterscheiden (Größe, Beine, Flügel, Wuchs, Blätter, Pilzform, Ort, Jahreszeit). Daraus entsteht eine mehrseitige Liste der Arten in deiner Umgebung.</li>
+    <li><b>Gemeinsame Bestenliste:</b> eine Textdatei im Repo (<a href="https://github.com/bunwichtig/nature/blob/main/bestenliste.json">bestenliste.json</a>). Der Knopf im Spiel öffnet ein vorausgefülltes GitHub-Issue, eine GitHub Action trägt den Stand ein (ein Eintrag pro GitHub-Konto) und schließt das Issue.</li>
     <li>Die vollständige Liste mit allen Bedingungen: <a href="https://github.com/bunwichtig/nature/blob/main/KATALOG.md">KATALOG.md</a>. Der Katalog selbst liegt in <code>js/katalog/</code>, die Regeln in <code>js/regeln.js</code>.</li>
   </ul></section>
 
@@ -37,11 +42,13 @@
   <section class="karte"><h2>Live-Daten</h2><ul>
     <li><b><a href="https://www.inaturalist.org">iNaturalist</a></b> – Artsuche, deutsche Namen, Systematik, Gefährdung, Beobachtungszahlen (Seltenheit), Fundraster der Habitatkarten, häufige Arten im Umkreis, Bestenliste der Umgebung, Übernahme eigener Beobachtungen. Fotos nur mit Creative-Commons-Lizenz (CC0, CC BY, CC BY-NC …), immer mit Urheber und Lizenz. Höchstens etwa eine Anfrage pro Sekunde. <a href="https://www.inaturalist.org/pages/terms">Nutzungsbedingungen</a> · <a href="https://www.inaturalist.org/pages/api+recommended+practices">API-Regeln</a></li>
     <li><b><a href="https://nominatim.openstreetmap.org">Nominatim</a> & <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a></b> (ODbL) – Ortssuche erst nach dem Absenden, Ortsname zum Standort, höchstens 1 Anfrage pro Sekunde. <a href="https://operations.osmfoundation.org/policies/nominatim/">Nutzungsregeln</a></li>
+    <li><b>STUN von Cloudflare</b> (<code>stun.cloudflare.com</code>) – nur wenn du beim Verbinden „Übers Internet“ wählst. Er sagt deinem Gerät seine öffentliche Adresse; Spieldaten gehen dort nicht hin. Im selben WLAN wird kein fremder Dienst gefragt.</li>
     <li><b><a href="https://openfreemap.org">OpenFreeMap</a></b> – Kartenbild der Habitatkarten (Daten OpenStreetMap / OpenMapTiles).</li>
   </ul></section>
 
   <section class="karte"><h2>Feste Daten im Repo</h2><ul>
     <li><b>World Checklist of Vascular Plants (WCVP)</b>, Royal Botanic Gardens, Kew – CC BY 4.0. Wuchsformen (Bäume, Sträucher, Wasser- & Sumpfpflanzen, Zwiebel & Knolle, Kletterpflanzen) für die Sammel-Abzeichen. Govaerts, R. et al. (2021): Scientific Data 8: 215. Aufbereitet in <a href="https://github.com/bunwichtig/naturewissen">bunwichtig/naturewissen</a>.</li>
+    <li><b>Merkmalstabelle</b> für „Schritt für Schritt bestimmen“ (<code>daten/merkmale.js</code>) – übernommen aus <a href="https://github.com/bunwichtig/naturewissen">bunwichtig/naturewissen</a>; die Belege dort verweisen auf Wikipedia-Artikel (CC BY-SA 4.0).</li>
   </ul></section>
 
   <section class="karte"><h2>Technik</h2><ul>

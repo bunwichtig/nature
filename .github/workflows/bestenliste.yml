@@ -1,0 +1,44 @@
+# Gemeinsame Bestenliste: Ein Issue mit dem Titel „Bestenliste: …“ (vom Knopf im Spiel vorausgefüllt)
+# wird gelesen, der Spielstand landet in bestenliste.json, das Issue wird mit einer Antwort geschlossen.
+name: Bestenliste
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: bestenliste
+  cancel-in-progress: false
+
+jobs:
+  eintragen:
+    if: startsWith(github.event.issue.title, 'Bestenliste:')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Spielstand eintragen
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_USER: ${{ github.event.issue.user.login }}
+        run: node .github/scripts/bestenliste.mjs
+      - name: Speichern
+        run: |
+          if git diff --quiet -- bestenliste.json; then exit 0; fi
+          git config user.name "bestenliste-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add bestenliste.json
+          git commit -m "Bestenliste: ${{ github.event.issue.user.login }}"
+          for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 3; done
+      - name: Antworten und schließen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --repo ${{ github.repository }} --body-file kommentar.txt
+          gh issue close ${{ github.event.issue.number }} --repo ${{ github.repository }}

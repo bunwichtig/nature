@@ -1,0 +1,5 @@
+{
+  "info": "Gemeinsame Bestenliste des Naturspiels. Wird von .github/workflows/bestenliste.yml aus Issues mit dem Titel „Bestenliste: …“ geschrieben. Ein Eintrag pro GitHub-Konto.",
+  "stand": null,
+  "spieler": []
+}
