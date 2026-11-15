@@ -391,7 +391,7 @@ function seiteProfil(){
     <li>Gefährdete Art +50 · erste Art einer neuen Gattung +10, Familie +20, Ordnung +40, Klasse +80</li>
     <li>Bekannte Art wiedergesehen: +5 (einmal pro Tag und Art) · Notiz +3 · nur bis zur Gruppe bestimmt: +15</li>
     <li>${LEVEL_MAX} Level. Habitatkarten von 0 bis ${fmt(HABITATE[HABITATE.length - 1].xp)} XP.</li></ul>
-    <p><a href="quellen.html">Quellen und Lizenzen</a></p></section>`;
+    <p><a href="quellen.html">Herkunft & Quellen</a> · <a href="archiv/mockup/">Ursprüngliches Mockup</a></p></section>`;
 }
 
 async function importieren(){
