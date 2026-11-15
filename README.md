@@ -8,6 +8,13 @@ Aufgebaut nach dem Bauplan von [bunwichtig/naturewissen](https://github.com/bunw
 - **Standard:** persönliches Kompendium (Funde mit Zeit, Ort, Notiz), Erfahrungspunkte (XP), 100 Level und **41 Habitatkarten**, die mit XP freigeschaltet werden. Jede Karte zeigt auf einer Karte, wo eine Gruppe (Vögel, Pflanzen, Pilze, Bäume, Amphibien, Reptilien, Eulen, Orchideen …) in der Umgebung gefunden wird, und die häufigsten Arten dort.
 - **Pro:** **566 Abzeichen**, **214 Titel**, **271 Avatare**, **53 Umrandungen** und die **Bestenliste** (Freunde per Code, Umgebung über iNaturalist). Fortschritte zählen auch in Standard mit und sind sofort da, wenn Pro eingeschaltet wird. Im Moment ist Pro ein Schalter im Profil („Vorschau“).
 
+## Gegner, Mitspieler, gemeinsame Bestenliste
+
+- Start: „Was hast du gefunden?“ – Suche oder Schnellauswahl häufiger Arten (`js/katalog/arten.js`, klappt notfalls auch ohne Verbindung).
+- Drei Gegner mit festem Zufall, die täglich weitersammeln (`js/gegner.js`).
+- „＋ Mitspielen“: mehrere Spieler auf einem Gerät (`js/speicher.js`).
+- Gemeinsame Bestenliste: `bestenliste.json`, geschrieben von `.github/workflows/bestenliste.yml` aus Issues mit dem Titel „Bestenliste: …“. Dafür müssen Issues im Repo eingeschaltet sein.
+
 ## Wo was steht
 
 | Datei | Inhalt |
