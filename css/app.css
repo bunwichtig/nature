@@ -164,7 +164,7 @@ details.karte[open] summary{margin-bottom:10px}
 .habkarte.zu{background:var(--panel);border-color:var(--line);opacity:.75}
 .habkarte.zu small{color:var(--muted)}
 .habkarte .bar{width:100%}
-.map{height:min(60vh,420px);border-radius:12px;overflow:hidden;margin:10px 0 6px;background:var(--panel-2)}
+.map{height:210px;border-radius:12px;overflow:hidden;margin:10px 0 6px;background:var(--panel-2)}
 
 /* ---------- Trophäen ---------- */
 .tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);margin:0 -4px}
@@ -339,3 +339,52 @@ details.karte[open] summary{margin-bottom:10px}
 .vgl .bar{margin:0}
 .bar.gegner i{background:#c0644f}
 .dlg .ava-k{padding:8px}
+
+/* ---------- Wer spielt mit? (oben links) ---------- */
+.kopf-spieler{position:relative;min-width:0}
+.kopf-spieler>summary{list-style:none;display:flex;align-items:center;gap:8px;cursor:pointer;padding:3px 10px 3px 3px;border-radius:999px;border:1px solid var(--line);background:var(--panel);max-width:62vw}
+.kopf-spieler>summary::-webkit-details-marker{display:none}
+.kopf-spieler[open]>summary{border-color:var(--leaf)}
+.stapel{display:flex;flex:none}
+.stapel .ava + .ava{margin-left:-10px}
+.wer{display:grid;line-height:1.15;min-width:0}
+.wer b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wer small{font-size:11px;color:var(--muted);white-space:nowrap}
+.spieler-menue{position:absolute;left:0;top:calc(100% + 8px);width:min(320px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:var(--panel);
+  border:1px solid var(--line);border-radius:16px;padding:8px;box-shadow:0 12px 40px rgba(0,0,0,.5);z-index:30}
+.menue-titel{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:8px 8px 4px}
+.menue-zeile{display:flex;align-items:center;gap:10px;width:100%;padding:6px 8px;border-radius:12px;background:none;border:0;text-align:left;text-decoration:none;cursor:pointer;color:inherit;font:inherit}
+.menue-zeile:hover,.menue-zeile.an{background:var(--panel-2)}
+.menue-zeile>span:not(.ava):not(.plus-rund){display:grid;line-height:1.2;flex:1;min-width:0}
+.menue-zeile b{font-size:14px} .menue-zeile small{font-size:12px;color:var(--muted)}
+.menue-zeile em{font-style:normal;font-size:11px;color:var(--leaf)}
+.menue-zeile .plus-rund{width:32px;height:32px}
+.menue-fuss{display:block;text-align:center;font-size:13px;padding:8px;margin-top:4px;border-top:1px solid var(--line);text-decoration:none;color:var(--pollen)}
+
+/* ---------- Habitatkarte: ausklappbar ---------- */
+.karten-klapp{margin-top:10px}
+.karten-klapp>summary{cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line);font-size:14px;list-style:none}
+.karten-klapp>summary::-webkit-details-marker{display:none}
+
+/* ---------- Seitennavigation ---------- */
+.pager{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.pg{min-width:40px;height:40px;padding:0 8px;border-radius:10px;background:var(--panel-2);border:1px solid var(--line);cursor:pointer;font:600 14px/1 var(--f-body);color:var(--ink)}
+.pg.an{background:var(--leaf);border-color:var(--leaf);color:#0b130d}
+.pg:disabled{opacity:.35;cursor:default}
+.pg-luecke{color:var(--muted);padding:0 2px}
+.pro-seite{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-left:auto}
+.pro-seite select{width:auto;min-height:40px;padding:6px 10px}
+.pager>.muted{width:100%;text-align:right}
+
+/* ---------- Schritt für Schritt bestimmen ---------- */
+.bestimmen{margin-top:14px}
+.schritt{margin-top:14px}
+.schritt>b{display:inline-block;margin-bottom:8px}
+.grob{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.grob-k{display:grid;justify-items:center;gap:4px;padding:10px 4px;border-radius:14px;background:var(--panel-2);border:1px solid var(--line);cursor:pointer;font-size:12px;text-align:center;color:var(--ink)}
+.grob-k span{font-family:var(--emoji);font-size:26px;line-height:1}
+.grob-k.an{border-color:var(--leaf);background:#1c2a1f;box-shadow:0 0 0 1px var(--leaf) inset}
+.frage{margin:8px 0}
+.frage>span{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.frage .chip small{opacity:.6;margin-left:2px}
+.bestimmen .liste .zeile:first-child{border-top:0}

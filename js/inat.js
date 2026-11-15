@@ -76,7 +76,7 @@ export async function beobachterUmkreis(lat, lng, km){
 
 /** Häufigste Arten einer Gruppe im Umkreis */
 export async function artenUmkreis(taxonIds, lat, lng, km, extra = {}){
-  const p = { lat:lat.toFixed(3), lng:lng.toFixed(3), radius:km, per_page:12, quality_grade:"research", ...INAT_DE, ...extra };
+  const p = { lat:lat.toFixed(3), lng:lng.toFixed(3), radius:km, per_page:20, quality_grade:"research", ...INAT_DE, ...extra };
   if (taxonIds?.length) p.taxon_id = taxonIds.join(",");
   const d = await inat("/observations/species_counts", p);
   return { total:d.total_results || 0, results:d.results || [] };

@@ -12,12 +12,14 @@ import { TITEL, TIT } from "./katalog/titel.js";
 import { AVATARE, AVA, SZENEN } from "./katalog/avatare.js";
 import { RAHMEN, RAH, SELTENHEIT } from "./katalog/rahmen.js";
 import { HABITATE, HAB } from "./katalog/habitate.js";
+import { initBestimmen, bestimmenHTML, bestimmenLaden, bestimmenKlick, bestimmenProSeite, seiten, BF_SELECTOR } from "./bestimmen.js";
 
 const main = $("#main");
 let C = null;                    // aktueller Spielstand (berechnet)
 const neu = () => (C = spielstand(spiel().funde, spiel().einst));
 neu();
 beiAenderung(neu);
+initBestimmen({ hat:tid => C.S.arten.has(tid), heimat:() => spiel().einst.heimat, neu:() => render() });
 
 const pro = () => !!spiel().einst.pro;
 
@@ -60,6 +62,26 @@ function kopf(){
   $("#kopf-pro").hidden = !e.pro;
   const route = (location.hash.slice(1) || "start").split("/")[0];
   for (const a of $$(".nav a")) a.classList.toggle("an", a.dataset.r === route || (a.dataset.r === "kompendium" && route === "art") || (a.dataset.r === "karten" && route === "karte"));
+  kopfSpieler();
+}
+/** Oben links: wer spielt mit? Avatar-Stapel, aufklappbar zur Liste */
+function kopfSpieler(){
+  const box = $("#kopf-spieler"); if (!box) return;
+  const offen = box.open, lokal = lokaleStaende(), geg = gegnerStand(fruehesterStart());
+  const ich = lokal.find(x => x.p.id === spiel().id);
+  const stapel = [ich, ...lokal.filter(x => x !== ich)].slice(0, 3);
+  box.innerHTML = `<summary aria-label="Wer spielt mit?"><span class="stapel">${stapel.map(x => avatarHTML(26, x.av, x.ra)).join("")}</span>
+    <span class="wer"><b>${esc(spiel().einst.name || "Naturfreund")}</b><small>${lokal.length} Spieler · ${geg.length} Gegner ▾</small></span></summary>
+  <div class="spieler-menue">
+    <p class="menue-titel">Spielen auf diesem Gerät</p>
+    ${lokal.map(({ p, C:c, av, ra }) => `<button class="menue-zeile${p.id === spiel().id ? " an" : ""}" data-spieler="${p.id}">${avatarHTML(32, av, ra)}<span><b>${esc(p.einst.name || "Naturfreund")}</b><small>Lv ${c.level} · ${fmt(c.S.arten.size)} Arten</small></span>${p.id === spiel().id ? `<em>spielt</em>` : ""}</button>`).join("")}
+    <button class="menue-zeile neu" data-act="mitspielen"><span class="plus-rund">＋</span><span><b>Mitspielen</b><small>Name, Figur, los</small></span></button>
+    <p class="menue-titel">Gegner</p>
+    ${geg.map(g => `<a class="menue-zeile" href="#gegner/${g.id}">${avatarHTML(32, g.avatarId, g.rahmenId)}<span><b>${esc(g.name)}</b><small>Lv ${g.C.level} · ${fmt(g.C.S.arten.size)} Arten</small></span></a>`).join("")}
+    ${(spiel().freunde || []).length ? `<p class="menue-titel">Freunde</p>${spiel().freunde.map(f => `<a class="menue-zeile" href="#trophaeen/bestenliste"><span class="plus-rund">👤</span><span><b>${esc(f.n)}</b><small>${fmt(f.x)} XP</small></span></a>`).join("")}` : ""}
+    <a class="menue-fuss" href="#trophaeen/bestenliste">Zur Bestenliste →</a>
+  </div>`;
+  box.open = offen;
 }
 
 // ---------- Start ----------
@@ -254,7 +276,7 @@ function seiteEintragen(tid, sci){
   }
   if (!key) { wahl = null; }
   const e = spiel().einst;
-  if (!wahl) return `<section class="karte finder">${wasGefunden()}</section>`;
+  if (!wahl) return `<section class="karte finder">${wasGefunden()}</section>${bestimmenHTML()}`;
   if (wahl.laedt) return `<p class="muted">Lade Art …</p>`;
   const schon = C.S.arten.has(wahl.art?.tid);
   return `
@@ -307,7 +329,8 @@ function seiteKarten(){
   }).join("")}</div>`;
 }
 
-let kartenKm = 30, karteObj = null;
+let kartenKm = 30, karteObj = null, kartenOffen = false;
+const hk = { id:null, page:1, per:20 };
 function seiteKarte(id){
   const h = HAB[id]; if (!h) return leer("Diese Karte gibt es nicht.");
   const e = spiel().einst;
@@ -318,25 +341,36 @@ function seiteKarte(id){
   <section class="karte"><h1>${h.zeichen} ${esc(h.name)}</h1><p>${esc(h.wo)}</p>
     ${e.heimat ? `<div class="reihe"><span class="muted">Um ${esc(e.heimat.ort)}</span>
       <select id="kkm" aria-label="Umkreis">${[10, 30, 50, 100].map(k => `<option value="${k}"${k === kartenKm ? " selected" : ""}>${k} km</option>`).join("")}</select></div>
-      <div id="map" class="map"></div><p class="klein muted">Orange Kästchen: hier wurde die Gruppe bei iNaturalist beobachtet. Zum Bewegen am Handy zwei Finger nehmen.</p>`
+      <details class="karten-klapp" id="kklapp"${kartenOffen ? " open" : ""}><summary>🗺️ Karte ${kartenOffen ? "verbergen" : "zeigen"}</summary>
+        <div id="map" class="map"></div><p class="klein muted">Orange Kästchen: hier wurde die Gruppe bei iNaturalist beobachtet. Zum Bewegen am Handy zwei Finger nehmen.</p></details>`
     : heimatForm("Für die Karte brauchen wir deinen Heimatort.")}
   </section>
   ${e.heimat ? `<section class="karte"><h2>Häufig in deiner Umgebung</h2><div id="hablist" class="muted">Lade …</div></section>` : ""}`;
 }
-async function karteLaden(id){
-  const h = HAB[id], e = spiel().einst; if (!h || !e.heimat || !$("#map")) return;
+async function karteZeichnen(id){
+  const h = HAB[id], e = spiel().einst; if (!h || !e.heimat || !$("#map") || !kartenOffen) return;
   try{
     const ids = h.taxa.length ? await taxonIdsOf(h.taxa) : [];
     const { zeigeKarte } = await import("./karte.js");
+    if (!$("#map")) return;
     karteObj?.remove?.(); karteObj = await zeigeKarte($("#map"), { lat:e.heimat.lat, lng:e.heimat.lng, km:kartenKm, taxonIds:ids, extra:h.extra });
-    const d = await artenUmkreis(ids, e.heimat.lat, e.heimat.lng, kartenKm, h.extra);
+  }catch(err){ if (!isAbort(err)) { const m = $("#map"); if (m) m.innerHTML = `<p class="muted" style="padding:12px">Karte konnte nicht geladen werden.</p>`; } }
+}
+function karteLaden(id){ karteZeichnen(id); return listeLaden(id); }
+async function listeLaden(id){
+  const h = HAB[id], e = spiel().einst; if (!h || !e.heimat || !$("#hablist")) return;
+  if (hk.id !== id){ hk.id = id; hk.page = 1; }
+  try{
+    const ids = h.taxa.length ? await taxonIdsOf(h.taxa) : [];
+    const d = await artenUmkreis(ids, e.heimat.lat, e.heimat.lng, kartenKm, { ...h.extra, per_page:hk.per, page:hk.page });
     const box = $("#hablist"); if (!box) return;
     box.classList.remove("muted");
-    box.innerHTML = d.results.length ? `<p class="klein muted">${fmt(d.total)} Arten mit bestätigten Funden im Umkreis von ${kartenKm} km. Die häufigsten:</p>` + d.results.map(r => {
+    const start = (hk.page - 1) * hk.per;
+    box.innerHTML = d.results.length ? `<p class="klein muted">${fmt(d.total)} Arten mit bestätigten Funden im Umkreis von ${kartenKm} km, häufigste zuerst – Platz ${fmt(start + 1)} bis ${fmt(start + d.results.length)}.</p>` + d.results.map(r => {
       const t = r.taxon, ph = freePhoto(t), hab = C.S.arten.has(t.id);
       return `<a class="zeile" href="#eintragen/${t.id}">${ph ? `<img class="mini" src="${esc(photoSize(ph.square_url || ph.url, "square"))}" alt="" loading="lazy" title="Foto: ${esc(ph.attribution)}">` : `<span class="mini nofoto">${h.zeichen}</span>`}
         <span><b>${esc(commonName(t))}</b><small>${esc(t.name)} · ${fmt(r.count)} Funde</small></span>${hab ? `<span class="tag neu">✓ hab ich</span>` : `<span class="plus">＋</span>`}</a>`;
-    }).join("") : `<p>Hier gibt es noch keine bestätigten Funde dieser Gruppe. Vielleicht bist du die erste Person?</p>`;
+    }).join("") + seiten(d.total, hk.page, hk.per, "hk") : `<p>Hier gibt es noch keine bestätigten Funde dieser Gruppe. Vielleicht bist du die erste Person?</p>`;
   }catch(err){ if (!isAbort(err)) { const b = $("#hablist"); if (b) b.textContent = "Konnte nicht geladen werden: " + err.message; } }
 }
 
@@ -539,6 +573,7 @@ function render(){
   document.title = { kompendium:"Kompendium", karten:"Habitatkarten", trophaeen:"Trophäen", profil:"Profil", eintragen:"Fund eintragen" }[route] ? `${{ kompendium:"Kompendium", karten:"Habitatkarten", trophaeen:"Trophäen", profil:"Profil", eintragen:"Fund eintragen" }[route]} · Pure Nature` : "Pure Nature – Kompendium";
   if ($("#aq")) artsucheAn();
   if (route === "karte") karteLaden(arg);
+  if (route === "eintragen" && !arg) bestimmenLaden();
   if (route === "trophaeen" && arg === "bestenliste" && bl === "umgebung") umgebungLaden();
   if (route === "trophaeen" && arg === "bestenliste" && bl === "gemeinsam") gemeinsamLaden();
 }
@@ -591,6 +626,12 @@ async function ortSuchen(q, liste, waehle){
 const setzeHeimat = h => { einstellen({ heimat:h }); toast(`🏡 Heimatort: ${esc(h.ort)}`); };
 
 document.addEventListener("click", async e => {
+  const sp = $("#kopf-spieler");
+  if (sp?.open && !e.target.closest("#kopf-spieler summary") && (!sp.contains(e.target) || e.target.closest("a,button"))) sp.open = false;
+  const bf = e.target.closest(BF_SELECTOR);
+  if (bf){ bestimmenKlick(bf); return; }
+  const pg = e.target.closest("[data-hk-page]");
+  if (pg){ hk.page = Math.max(1, +pg.dataset.hkPage); $("#hablist")?.scrollIntoView({ block:"start", behavior:"smooth" }); listeLaden(location.hash.split("/")[1]); return; }
   const t = e.target.closest("[data-act],[data-kb],[data-tf],[data-bl],[data-titel],[data-ava],[data-rahmen],[data-del],[data-freund-weg],[data-spieler],[data-sw],[data-start-ava]");
   if (!t) return;
   const d = t.dataset;
@@ -633,7 +674,9 @@ document.addEventListener("change", e => {
   const t = e.target;
   if (t.id === "kg"){ kf.gruppe = t.value; render(); }
   else if (t.id === "ks"){ kf.sort = t.value; render(); }
-  else if (t.id === "kkm"){ kartenKm = +t.value; karteLaden(location.hash.split("/")[1]); }
+  else if (t.id === "kkm"){ kartenKm = +t.value; hk.page = 1; karteLaden(location.hash.split("/")[1]); }
+  else if (t.matches("[data-hk-per]")){ hk.per = +t.value; hk.page = 1; listeLaden(location.hash.split("/")[1]); }
+  else if (t.matches("[data-bf-per]")) bestimmenProSeite(t.value);
   else if (t.id === "ppro") einstellen({ pro:t.checked });
   else if (t.id === "pname") einstellen({ name:t.value.trim() });
   else if (t.id === "pimport" && t.files[0]) einlesen(t.files[0]).then(() => toast("✓ Sicherung eingelesen"), err => toast(esc(err.message)));
@@ -657,6 +700,12 @@ document.addEventListener("submit", async e => {
   belohnung(vor, C, f);
 });
 
+document.addEventListener("toggle", e => {
+  if (e.target.id !== "kklapp") return;
+  kartenOffen = e.target.open;
+  e.target.querySelector("summary").textContent = `🗺️ Karte ${kartenOffen ? "verbergen" : "zeigen"}`;
+  if (kartenOffen) karteZeichnen(location.hash.split("/")[1]); else { karteObj?.remove?.(); karteObj = null; }
+}, true);
 window.addEventListener("hashchange", () => { window.scrollTo(0, 0); render(); });
 beiAenderung(() => render());
 render();
